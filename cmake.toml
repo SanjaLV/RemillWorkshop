@@ -44,3 +44,8 @@ sources = ["src/bc-tool.cpp"]
 [target.bc-stats]
 type = "llvm-tool"
 sources = ["src/bc-stats.cpp"]
+
+
+[target.bc-cfg]
+type = "llvm-tool"
+sources = ["src/bc-cfg.cpp"]

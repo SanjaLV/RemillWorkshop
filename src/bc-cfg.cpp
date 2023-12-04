@@ -2,21 +2,35 @@
 #include <map>
 
 #include "utility.hpp"
+#include "llvm/IR/CFG.h"
 
 using namespace llvm;
 
+namespace Sanja::Graph {
+struct Edge {
+  std::string from, to;
+
+  template <typename T>
+  Edge (T a, T b) : from(a), to(b) {}
+};
+
+typedef std::vector<Edge> Edges;
+} // namespace Sanja::Graph
+
 static void ProcessModule(Module &M) {
   for (Function &F : M.functions()) {
-    std::map<uint32_t, size_t> instruction_calls;
+
+    Sanja::Graph::Edges edges;
+
     for (BasicBlock &BB : F) {
-      for (Instruction &I : BB) {
-        instruction_calls[I.getOpcode()]++;
+      for (BasicBlock *Pred : predecessors(&BB)) {
+        edges.emplace_back(Pred->getName(), BB.getName());
       }
     }
 
     outs() << "Function " << F.getName() << "\n";
-    for (const auto &[key, value] : instruction_calls) {
-      outs() << Instruction::getOpcodeName(key) << " " << value << "\n";
+    for (const auto &[a, b] : edges) {
+      outs() << a << " -> " << b << "\n";
     }
   }
 }

@@ -183,3 +183,29 @@ get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} D
 if(NOT CMKR_VS_STARTUP_PROJECT)
 	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bc-stats)
 endif()
+
+# Target: bc-cfg
+set(bc-cfg_SOURCES
+	"src/bc-cfg.cpp"
+	cmake.toml
+)
+
+add_executable(bc-cfg)
+
+target_sources(bc-cfg PRIVATE ${bc-cfg_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${bc-cfg_SOURCES})
+
+target_compile_features(bc-cfg PRIVATE
+	cxx_std_20
+)
+
+target_link_libraries(bc-cfg PRIVATE
+	LLVM-Wrapper
+	remill
+	remill_settings
+)
+
+get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} DEFINITION VS_STARTUP_PROJECT)
+if(NOT CMKR_VS_STARTUP_PROJECT)
+	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bc-cfg)
+endif()
